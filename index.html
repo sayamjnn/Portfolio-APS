@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="index.css">
+</head>
+<body>
+    <div name="header">
+        <h1>Data-Driven Solutions in Food Delivery Apps</h1>
+        <div class="course-info">
+            <p>Course Name: Algorithmic Problem Solving</p>
+            <p>Course Code: 23ECSE309</p>
+        </div>
+        <div class="personal-info">
+            <p>Name: Sayam Jain</p>
+            <p>University: KLE Technological University, Hubballi-31</p>
+        </div>
+    </div>
+    <div name="description">
+        <p><strong>Introduction to portfolio</strong></p>
+        <p>The portfolio presented here showcases a comprehensive project centered around the development and optimization of data-driven solutions in food delivery apps. With the rising demand for convenient food ordering and delivery services, the food-delivery industry has witnessed a significant surge in recent years. This project emphasizes the critical role of data management and algorithmic problem-solving in creating seamless and efficient user experiences within food delivery applications.</p>
+        <p><strong>Need for portfolio</strong></p>
+        <p>
+            In today's competitive tech landscape, this portfolio is indispensable for demonstrating expertise in developing data-driven solutions for food delivery apps. It serves as a tangible showcase of one's skills in algorithmic problem-solving, data management, and user experience design, crucial for attracting potential employers.</p>
+        <p><strong>Objectives</strong></p>
+        <ul>
+            <li>To implement an efficient and responsive search functionality</li>
+            <li>To implement an efficient and accurate real-time order tracking system</li>
+        </ul>
+        <p><strong>Design</strong></p>
+        <ul>
+            <li><p>Design approach for efficient and responsive search functionality:
+                <br><span>To design an efficient and responsive search functionality within food-delivery apps, a well-structured approach involves constructing a data structure
+                     that supports fast and accurate searches. A trie data structure can be an effective approach for this purpose. By implementing a trie, the system can store restaurant and
+                      dish names.This allows for efficient prefix matching and real-time autocomplete suggestions.
+                      The trie also supports exact match searches and can be extended for fuzzy search capabilities.
+                      <a href="Trie1.java">Click here</a> to view the implementation of the trie data structure.However, tries have some disadvantages. They can consume a lot of memory, especially with a large dataset, due to storing many nodes with null pointers. Additionally, tries can be less efficient in terms of space when the stored keys have common prefixes. This optimization makes radix trees more space-efficient while still providing fast lookup times. By using a radix tree, the search functionality can be optimized further, maintaining the benefits of fast prefix matching and autocomplete suggestions while using less memory compared to a traditional trie.   
+                      <a href="RadixTree.java">Click here</a> to view the implementation of the radix tree.        </span></p></li>
+
+            <li><p>Design approach for efficient and accurate real-time order tracking system:<br><span>To design an efficient and accurate real-time order tracking system, we need to ensure that the system can dynamically calculate the optimal route for order delivery, adapt to real-time changes, and provide accurate ETA (Estimated Time of Arrival). 
+                One effective approach to achieving this is by employing the A* search algorithm, a pathfinding and graph traversal algorithm known for its efficiency and accuracy in finding the shortest path.
+                <a href="AStarSearch.java">Click here</a> to view the implementation of the algorithm.
+            </span></p></li>
+        </ul>
+    </div>
+
+
+
+    <div name="footer" class="footer">
+        <p>&copy; 2024 All rights reserved.</p>
+    </div>
+</body>
+</html>

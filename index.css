@@ -1,0 +1,106 @@
+/* Reset some default browser styles */
+body, div, p {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Set the font for the entire document */
+body {
+    font-family: Arial, sans-serif;
+    line-height: 1.6;
+    background-color: #f4f4f4;
+    color: #333;
+    padding: 0 20px;
+}
+
+/* Style for the header */
+div[name="header"] {
+    background-color: #4CAF50;
+    color: white;
+    padding: 20px;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+div[name="header"] h1 {
+    font-size: 24px;
+    margin-bottom: 10px;
+}
+
+div[name="header"] .info {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+}
+
+div[name="header"] .info .course-info,
+div[name="header"] .info .personal-info {
+    width: 48%;
+}
+
+div[name="header"] .info p {
+    margin: 5px 0;
+}
+
+/* Style for the description */
+div[name="description"] {
+    padding: 20px;
+    background-color: white;
+    border-bottom: 1px solid #ccc;
+    border-top: 1px solid #ccc;
+    margin-bottom: 20px;
+}
+
+div[name="description"] p {
+    margin-bottom: 15px;
+}
+
+div[name="description"] p strong {
+    display: block;
+    margin-bottom: 5px;
+    font-size: 18px;
+    color: #4CAF50;
+}
+
+/* Style for the footer */
+div[name="footer"] {
+    background-color: #333;
+    color: white;
+    text-align: center;
+    padding: 10px;
+    position: fixed;
+    width: calc(100% - 40px); /* Adjust for padding in body */
+    bottom: 0;
+}
+
+/* Style for the design block */
+div[name="description"] ul {
+    margin-left: 20px;
+}
+
+div[name="description"] ul li {
+    margin-bottom: 10px;
+    list-style-type: disc;
+}
+
+div[name="description"] ul li:first-child {
+    margin-top: 10px;
+}
+
+div[name="description"] ul li:last-child {
+    margin-bottom: 0;
+}
+
+/* Target the span correctly */
+div[name="description"] ul li p span {
+    display: inline; 
+    margin-left: 460px;
+}
+
+.footer {
+    background-color: #333;
+    color: #fff;
+    padding: 20px;
+    text-align: center;
+}
