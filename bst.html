@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Binary Search Tree (BST) in Java</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        h1, h2 {
+            color: teal; 
+        }
+        p{
+            margin-top: 5px;
+        }
+        pre {
+            background: #f4f4f4;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        table, th, td {
+            border: 1px solid #ddd;
+        }
+        th, td {
+            padding: 12px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        pre, code {
+            background: #000;
+            color: #fff;
+        }
+
+    </style>
+</head>
+<body>
+    <h1>Binary Search Tree (BST)</h1>
+    
+    <h2>Description</h2>
+    <p>A Binary Search Tree (BST) is a hierarchical data structure in which each node has at most two children, referred to as the left child and the right child. It satisfies the binary search property where the key in each node must be greater than or equal to any key stored in the left sub-tree, and less than or equal to any key stored in the right sub-tree.</p>
+    
+    <h2>Operations and Complexity</h2>
+    <p>The time complexity of operations in a BST depends on the height of the tree, which is typically logarithmic in the average case and linear in the worst case:</p>
+    <table>
+        <thead>
+            <tr>
+                <th>Operation</th>
+                <th>Time Complexity (Average)</th>
+                <th>Time Complexity (Worst)</th>
+                <th>Space Complexity</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Insertion</td>
+                <td>O(log n)</td>
+                <td>O(n) - skewed tree</td>
+                <td>O(log n) due to recursion</td>
+            </tr>
+            <tr>
+                <td>Deletion</td>
+                <td>O(log n)</td>
+                <td>O(n) - skewed tree</td>
+                <td>O(log n) due to recursion</td>
+            </tr>
+            <tr>
+                <td>Search</td>
+                <td>O(log n)</td>
+                <td>O(n) - skewed tree</td>
+                <td>O(1)</td>
+            </tr>
+            <tr>
+                <td>Traversal (Inorder, Preorder, Postorder)</td>
+                <td>O(n)</td>
+                <td>O(n)</td>
+                <td>O(n) due to recursion</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <h2>Implementation</h2>
+    <pre><code>import java.util.Scanner;
+
+public class BST {
+    TreeNode root;
+
+    public BST() {
+        this.root = null;
+    }
+
+    public TreeNode insert(TreeNode root, int data) {
+        if (root == null) {
+            root = new TreeNode(data);
+            System.out.println("Root node inserted into tree");
+            return root;
+        }
+
+        if (data < root.data) {
+            root.left = insert(root.left, data);
+        } else if (data > root.data) {
+            root.right = insert(root.right, data);
+        }
+
+        return root;
+    }
+
+    public void inorder(TreeNode root) {
+        if (root != null) {
+            inorder(root.left);
+            System.out.print(root.data + "\t");
+            inorder(root.right);
+        }
+    }
+
+    public void preorder(TreeNode root) {
+        if (root != null) {
+            System.out.print(root.data + "\t");
+            preorder(root.left);
+            preorder(root.right);
+        }
+    }
+
+    public void postorder(TreeNode root) {
+        if (root != null) {
+            postorder(root.left);
+            postorder(root.right);
+            System.out.print(root.data + "\t");
+        }
+    }
+
+    public TreeNode deleteNode(TreeNode root, int data) {
+        if (root == null) {
+            System.out.println("Item not found");
+            return root;
+        }
+
+        if (data < root.data) {
+            root.left = deleteNode(root.left, data);
+        } else if (data > root.data) {
+            root.right = deleteNode(root.right, data);
+        } else {
+            if (root.left == null) {
+                return root.right;
+            } else if (root.right == null) {
+                return root.left;
+            }
+            root.data = minValue(root.right);
+            root.right = deleteNode(root.right, root.data);
+        }
+
+        return root;
+    }
+
+    public int minValue(TreeNode root) {
+        int minv = root.data;
+        while (root.left != null) {
+            minv = root.left.data;
+            root = root.left;
+        }
+        return minv;
+    }
+
+    public static void main(String[] args) {
+        BST bst = new BST();
+        Scanner scanner = new Scanner(System.in);
+        int choice, data;
+
+        while (true) {
+            System.out.println("\n******** Menu *************");
+            System.out.println("1-Insert into BST");
+            System.out.println("2-Inorder Traversal");
+            System.out.println("3-Preorder Traversal");
+            System.out.println("4-Postorder Traversal");
+            System.out.println("5-Delete from BST");
+            System.out.println("6-Exit");
+            System.out.println("*****************************");
+            System.out.println("Enter your choice:");
+            choice = scanner.nextInt();
+
+            switch (choice) {
+                case 1:
+                    System.out.println("Enter the item to insert:");
+                    data = scanner.nextInt();
+                    bst.root = bst.insert(bst.root, data);
+                    break;
+                case 2:
+                    if (bst.root == null)
+                        System.out.println("Tree is empty");
+                    else {
+                        System.out.println("Inorder Traversal is...");
+                        bst.inorder(bst.root);
+                        System.out.println();
+                    }
+                    break;
+                case 3:
+                    if (bst.root == null)
+                        System.out.println("Tree is empty");
+                    else {
+                        System.out.println("Preorder Traversal is...");
+                        bst.preorder(bst.root);
+                        System.out.println();
+                    }
+                    break;
+                case 4:
+                    if (bst.root == null)
+                        System.out.println("Tree is empty");
+                    else {
+                        System.out.println("Postorder Traversal is...");
+                        bst.postorder(bst.root);
+                        System.out.println();
+                    }
+                    break;
+                case 5:
+                    System.out.println("Enter the item to be deleted:");
+                    data = scanner.nextInt();
+                    bst.root = bst.deleteNode(bst.root, data);
+                    break;
+                case 6:
+                    scanner.close();
+                    System.exit(0);
+                default:
+                    System.out.println("Invalid choice! Please enter a valid option.");
+            }
+        }
+    }
+}
+</code></pre>
+</body>
+</html>

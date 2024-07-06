@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trie Data Structure</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        h1, h2 {
+            color: teal; 
+        }
+        p{
+            margin-top: 5px;
+        }
+        pre {
+            background: #f4f4f4;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        table, th, td {
+            border: 1px solid #ddd;
+        }
+        th, td {
+            padding: 12px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        pre, code {
+            background: #000;
+            color: #fff;
+        }
+
+    </style>
+</head>
+<body>
+    <h1>Trie Data Structure</h1>
+    <p>A Trie (pronounced as "try") is a tree-like data structure that is used to store a dynamic set of strings. Tries are also known as prefix trees, as they can efficiently store and search strings with common prefixes.</p>
+    <p>Each node in a Trie represents a single character of the string, and each path from the root to a leaf represents a complete string. This structure allows for efficient insertion, deletion, and search operations.</p>
+    <h2>Time and Space Complexity</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Operation</th>
+                <th>Time Complexity</th>
+                <th>Space Complexity</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Insertion</td>
+                <td>O(L)</td>
+                <td>O(AL)</td>
+            </tr>
+            <tr>
+                <td>Search</td>
+                <td>O(L)</td>
+                <td>O(1)</td>
+            </tr>
+            <tr>
+                <td>Deletion</td>
+                <td>O(L)</td>
+                <td>O(1)</td>
+            </tr>
+        </tbody>
+    </table>
+    <p>Where L is the length of the word being inserted, searched, or deleted, and A is the size of the alphabet.</p>
+    <h2>Implementation</h2>
+    <pre><code>import java.util.HashSet;
+import java.util.Set;
+
+public class Trie1 {
+    static class Node {
+        Node[] children;
+        boolean endOfWord;
+
+        public Node() {
+            children = new Node[26];
+            for (int i = 0; i &lt; 26; i++) {
+                children[i] = null;
+            }
+            endOfWord = false;
+        }
+    }
+
+    static Node root = new Node();
+    public static void insert(String word) {
+        Node curr = root;
+        for (int i = 0; i &lt; word.length(); i++) {
+            int index = word.charAt(i) - 'a';
+            if (curr.children[index] == null) {
+                curr.children[index] = new Node();
+            }
+            if (i == word.length() - 1) {
+                curr.children[index].endOfWord = true;
+            }
+            curr = curr.children[index];
+        }
+    }
+
+    public static void displayAllMiddleSequenceStrings(String sequence) {
+        Set&lt;String&gt; result = new HashSet&lt;&gt;();
+        dfs(root, sequence, new StringBuilder(), 0, sequence.length(), result);
+        for (String str : result) {
+            System.out.println(str);
+        }
+    }
+
+    private static void dfs(Node node, String sequence, StringBuilder currentWord, int index, int length, Set&lt;String&gt; result) {
+        if (node == null) return;
+        if (index == length && node.endOfWord) {
+            result.add(currentWord.toString());
+        }
+        if (index &lt; length) {
+            int nextIndex = sequence.charAt(index) - 'a';
+            if (node.children[nextIndex] != null) {
+                currentWord.append(sequence.charAt(index));
+                dfs(node.children[nextIndex], sequence, currentWord, index + 1, length, result);
+                currentWord.setLength(currentWord.length() - 1);
+            }
+        }
+        for (int i = 0; i &lt; 26; i++) {
+            if (node.children[i] != null) {
+                currentWord.append((char) ('a' + i));
+                dfs(node.children[i], sequence, currentWord, index, length, result);
+                currentWord.setLength(currentWord.length() - 1);
+            }
+        }
+    }
+
+    public static void main(String[] args) {
+        String words[] = { "kamattiffins", "kamatkosher", "kamatcafe", "kamathotel", "kamatdose","panjurli" };
+        for (String word : words) {
+            insert(word);
+        }
+
+        String sequence = "kamat";
+        System.out.println("Words containing middle sequence \"" + sequence + "\":");
+        displayAllMiddleSequenceStrings(sequence);
+    }
+}</code></pre>
+</body>
+</html>

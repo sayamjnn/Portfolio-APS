@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Radix Tree (Patricia Trie)</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        h1, h2 {
+            color: teal; 
+        }
+        p{
+            margin-top: 5px;
+        }
+        pre {
+            background: #f4f4f4;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        table, th, td {
+            border: 1px solid #ddd;
+        }
+        th, td {
+            padding: 12px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        pre, code {
+            background: #000;
+            color: #fff;
+        }
+
+    </style>
+</head>
+<body>
+    <h1>Radix Tree (Patricia Trie)</h1>
+    <p>A Radix Tree, also known as a Patricia Trie, is a compressed trie data structure that stores strings efficiently by sharing nodes that are identical for a given prefix. This results in improved space efficiency over standard tries.</p>
+    <p>Each node in a Radix Tree represents a string prefix, and the edges between nodes represent characters. Unlike standard tries, nodes are merged if they have a single child, reducing the number of nodes and memory usage.</p>
+    <h2>Time and Space Complexity</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Operation</th>
+                <th>Time Complexity</th>
+                <th>Space Complexity</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Insertion</td>
+                <td>O(L)</td>
+                <td>O(n)</td>
+            </tr>
+            <tr>
+                <td>Search</td>
+                <td>O(L)</td>
+                <td>O(1)</td>
+            </tr>
+            <tr>
+                <td>Deletion</td>
+                <td>O(L)</td>
+                <td>O(1)</td>
+            </tr>
+        </tbody>
+    </table>
+    <p>Where L is the length of the word being inserted, searched, or deleted, and n is the number of nodes in the tree.</p>
+    <h2>Implementation</h2>
+    <pre><code>import java.util.*;
+
+public class RadixTree {
+    static class Node {
+        Map&lt;Character, Node&gt; children;
+        boolean isEndOfWord;
+
+        Node() {
+            children = new HashMap&lt;&gt;();
+            isEndOfWord = false;
+        }
+    }
+
+    private Node root;
+
+    public RadixTree() {
+        root = new Node();
+    }
+
+    public void insert(String word) {
+        Node current = root;
+        for (char ch : word.toCharArray()) {
+            current.children.putIfAbsent(ch, new Node());
+            current = current.children.get(ch);
+        }
+        current.isEndOfWord = true;
+    }
+
+    public boolean search(String word) {
+        Node current = root;
+        for (char ch : word.toCharArray()) {
+            if (!current.children.containsKey(ch)) {
+                return false;
+            }
+            current = current.children.get(ch);
+        }
+        return current.isEndOfWord;
+    }
+
+    public void delete(String word) {
+        delete(root, word, 0);
+    }
+
+    private boolean delete(Node current, String word, int index) {
+        if (index == word.length()) {
+            if (!current.isEndOfWord) {
+                return false; 
+            }
+            current.isEndOfWord = false;
+            return current.children.isEmpty(); 
+        }
+
+        char ch = word.charAt(index);
+        Node node = current.children.get(ch);
+        if (node == null) {
+            return false; 
+        }
+
+        boolean shouldDeleteCurrentNode = delete(node, word, index + 1);
+
+        if (shouldDeleteCurrentNode) {
+            current.children.remove(ch);
+            return current.children.isEmpty(); 
+        }
+
+        return false;
+    }
+
+    public List&lt;String&gt; displayWithPrefix(String prefix) {
+        List&lt;String&gt; result = new ArrayList&lt;&gt;();
+        Node node = getNodeForPrefix(prefix);
+        if (node != null) {
+            displayWordsFromNode(node, prefix, result);
+        }
+        return result;
+    }
+
+    private Node getNodeForPrefix(String prefix) {
+        Node current = root;
+        for (char ch : prefix.toCharArray()) {
+            if (!current.children.containsKey(ch)) {
+                return null; // Prefix not found
+            }
+            current = current.children.get(ch);
+        }
+        return current;
+    }
+
+    private void displayWordsFromNode(Node node, String prefix, List&lt;String&gt; result) {
+        if (node.isEndOfWord) {
+            result.add(prefix);
+        }
+        for (char ch : node.children.keySet()) {
+            displayWordsFromNode(node.children.get(ch), prefix + ch, result);
+        }
+    }
+
+    public List&lt;String&gt; displayContainingSubstring(String substring) {
+        List&lt;String&gt; result = new ArrayList&lt;&gt;();
+        for (char ch : root.children.keySet()) {
+            searchSubstring(root.children.get(ch), new StringBuilder().append(ch), substring, result);
+        }
+        return result;
+    }
+
+    private void searchSubstring(Node node, StringBuilder currentWord, String substring, List&lt;String&gt; result) {
+        if (currentWord.toString().contains(substring) &amp;&amp; node.isEndOfWord) {
+            result.add(currentWord.toString());
+        }
+        for (char ch : node.children.keySet()) {
+            currentWord.append(ch);
+            searchSubstring(node.children.get(ch), currentWord, substring, result);
+            currentWord.setLength(currentWord.length() - 1);
+        }
+    }
+
+    public static void main(String[] args) {
+        RadixTree trie = new RadixTree();
+
+        String[] restaurants = {"kamattiffins", "kamatkosher", "kamatcafe", "kamathotel", "panjurli"};
+
+        for (String restaurant : restaurants) {
+            trie.insert(restaurant);
+        }
+
+        String substring = "ka";
+        List&lt;String&gt; wordsWithSubstring = trie.displayContainingSubstring(substring);
+        System.out.println("Words containing substring '" + substring + "': " + wordsWithSubstring);
+    }
+}
+</code></pre>
+</body>
+</html>
