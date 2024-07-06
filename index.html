@@ -44,31 +44,39 @@
         </ul>
         <p><strong>Design</strong></p>
         <ul>
-            <li><p>Design approach for efficient and responsive search functionality:
-                <br><span>To design an efficient and responsive search functionality within food-delivery apps, a well-structured approach involves constructing a data structure
+            <li><p><b class="hass">Design approach for efficient and responsive search functionality:</b>
+                <br>To design an efficient and responsive search functionality within food-delivery apps, a well-structured approach involves constructing a data structure
                      that supports fast and accurate searches. A trie data structure can be an effective approach for this purpose. By implementing a trie, the system can store restaurant and
                       dish names.This allows for efficient prefix matching and real-time autocomplete suggestions.
                       The trie also supports exact match searches and can be extended for fuzzy search capabilities.
-                      <a href="Trie1.java">Click here</a> to view the implementation of the trie data structure.However, tries have some disadvantages. They can consume a lot of memory, especially with a large dataset, due to storing many nodes with null pointers. Additionally, tries can be less efficient in terms of space when the stored keys have common prefixes. This optimization makes radix trees more space-efficient while still providing fast lookup times. By using a radix tree, the search functionality can be optimized further, maintaining the benefits of fast prefix matching and autocomplete suggestions while using less memory compared to a traditional trie.   
-                      <a href="RadixTree.java">Click here</a> to view the implementation of the radix tree.        </span></p></li>
+                      <br>   
+                      <a href="trie.html">Click here</a> to view the implementation of the trie data structure.<br>
+                      However, tries have some disadvantages. They can consume a lot of memory, especially with a large dataset, due to storing many nodes with null pointers. Additionally, tries can be less efficient in terms of space when the stored keys have common prefixes. This optimization makes radix trees more space-efficient while still providing fast lookup times. By using a radix tree, the search functionality can be optimized further, maintaining the benefits of fast prefix matching and autocomplete suggestions while using less memory compared to a traditional trie.
 
-            <li><p>Design approach for efficient and accurate real-time order tracking system:<br><span>To design an efficient and accurate real-time order tracking system, we need to ensure that the system can dynamically calculate the optimal route for order delivery, adapt to real-time changes, and provide accurate ETA (Estimated Time of Arrival). 
+                      <br>
+                      <a href="radix.html">Click here</a> to view the implementation of the radix tree. </p></li>
+
+            <li><p><b class="hass">Design approach for efficient and accurate real-time order tracking system:</b>
+                <br>To design an efficient and accurate real-time order tracking system, we need to ensure that the system can dynamically calculate the optimal route for order delivery, adapt to real-time changes, and provide accurate ETA (Estimated Time of Arrival). 
                 One effective approach to achieving this is by employing the A* search algorithm, a pathfinding and graph traversal algorithm known for its efficiency and accuracy in finding the shortest path.
-                <a href="AStarSearch.java">Click here</a> to view the implementation of the algorithm.
-            </span></p></li>
-            <li><p>Design approach for enhancing restaurant management:<br><span>
+                <br>
+                <a href="astar.html">Click here</a> to view the implementation of the algorithm.
+            </p></li>
+            <li><p><b class="hass">Design approach for enhancing restaurant management:</b><br>
 
                 To enhance restaurant management by implementing a robust system for efficient insertion, deletion, and searching of restaurant attributes like ratings, cuisines, and menus, we can employ both the Binary Search Tree (BST) and AVL Tree algorithms. While BSTs are effective for dynamic data management, AVL trees offer additional efficiency through their self-balancing mechanism.
 
                 BSTs provide fast access, updates, and organization of records, making them suitable for applications where data is inserted in a random order but can lead to performance degradation if the tree becomes unbalanced.
-                <a href="TreeNode.java">Click here</a> to view the implementation of the BST structure.
-                <a href="BST.java">Click here</a> to view the implementation of the BST.
-                
-                On the other hand, AVL trees ensure balance by performing rotations during insertion and deletion operations. This guarantees consistent O(log n) time complexity for insertion, deletion, and search operations, regardless of the order of data insertion.           
-                <a href="AVLTree.java">Click here</a> to view the implementation of the AVL Tree. 
+                         
+                <br>
+                <a href="treenode.html">Click here</a> to view the implementation of the BST structure.
+                <a href="bst.html">Click here</a> to view the implementation of the BST.<br>
+                On the other hand, AVL trees ensure balance by performing rotations during insertion and deletion operations. This guarantees consistent O(log n) time complexity for insertion, deletion, and search operations, regardless of the order of data insertion.  
+                <br>
+                <a href="avl.html">Click here</a> to view the implementation of the AVL Tree. 
                
 
-            </span></p></li>
+            </p></li>
         </ul>
     </div>
 
