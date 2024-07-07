@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hungarian Algorithm for Workforce Scheduling</title>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        margin: 20px;
+    }
+    h1, h2 {
+        color: teal; 
+    }
+    p{
+        margin-top: 5px;
+    }
+    pre {
+        background: #f4f4f4;
+        padding: 15px;
+        border-radius: 5px;
+        overflow-x: auto;
+    }
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 20px;
+    }
+    table, th, td {
+        border: 1px solid #ddd;
+    }
+    th, td {
+        padding: 12px;
+        text-align: left;
+    }
+    th {
+        background-color: #f2f2f2;
+    }
+    pre, code {
+        background: #000;
+        color: #fff;
+    }
+</style>
+</head>
+<body>
+    <h1>Hungarian Algorithm for Workforce Scheduling</h1>
+    
+    <p>The Hungarian Algorithm is used to optimize workforce scheduling by finding the optimal assignment of drivers to delivery tasks based on a cost matrix. Each cell in the matrix represents the cost (e.g., time, distance) associated with assigning a driver to a specific task.</p>
+    
+    <h2>Time and Space Complexity</h2>
+    
+    <table>
+        <tr>
+            <th>Aspect</th>
+            <th>Complexity</th>
+        </tr>
+        <tr>
+            <td>Time Complexity</td>
+            <td>O(n^3)</td>
+        </tr>
+        <tr>
+            <td>Auxiliary Space Complexity</td>
+            <td>O(n^2)</td>
+        </tr>
+    </table>
+    
+    <h2>Implementation</h2>
+    
+    <pre><code>
+import java.util.Arrays;
+
+public class HungarianAlgorithm {
+
+    private static final int INF = Integer.MAX_VALUE;
+
+    public static int[] hungarianAlgorithm(int[][] costMatrix) {
+        int n = costMatrix.length;
+        int[] assignment = new int[n];
+        Arrays.fill(assignment, -1);
+
+        int[] u = new int[n];
+        int[] v = new int[n];
+        Arrays.fill(u, 0);
+        Arrays.fill(v, 0);
+
+        for (int i = 0; i < n; i++) {
+            int[] links = new int[n];
+            Arrays.fill(links, -1);
+            boolean[] visited = new boolean[n];
+            int[] minSlack = new int[n];
+            Arrays.fill(minSlack, INF);
+
+            int current = -1;
+            int next = -1;
+            assignment[i] = -1;
+            outer: for (int j = 0; j < n; j++) {
+                current = next;
+                visited[current] = true;
+                int delta = INF;
+                for (int k = 0; k < n; k++) {
+                    if (!visited[k]) {
+                        int slack = costMatrix[current][k] - u[current] - v[k];
+                        if (slack < minSlack[k]) {
+                            minSlack[k] = slack;
+                            links[k] = current;
+                        }
+                        if (minSlack[k] < delta) {
+                            delta = minSlack[k];
+                            next = k;
+                        }
+                    }
+                }
+
+                for (int k = 0; k < n; k++) {
+                    if (visited[k]) {
+                        u[assignment[k]] += delta;
+                        v[k] -= delta;
+                    } else {
+                        minSlack[k] -= delta;
+                    }
+                }
+            }
+
+            do {
+                if (current != -1) {
+                    assignment[next] = links[next];
+                    current = assignment[next];
+                }
+                next = links[current];
+            } while (next != -1);
+        }
+
+        return assignment;
+    }
+
+    public static void main(String[] args) {
+        // Example cost matrix (driver-task assignment costs)
+        int[][] costMatrix = {
+            {3, 1, 5},   // Driver 1 costs for Tasks 1, 2, 3
+            {2, 4, 6},   // Driver 2 costs for Tasks 1, 2, 3
+            {7, 3, 5}    // Driver 3 costs for Tasks 1, 2, 3
+        };
+
+        int[] assignment = hungarianAlgorithm(costMatrix);
+
+        // Printing the optimal assignment
+        System.out.println("Optimal Assignment:");
+        for (int i = 0; i < assignment.length; i++) {
+            System.out.println("Driver " + (i+1) + " assigned to Task " + (assignment[i]+1));
+        }
+    }
+}
+    </code></pre>
+
+</body>
+</html>

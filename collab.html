@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Collaborative Filtering Recommendation System</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        h1, h2 {
+            color: teal; 
+        }
+        p{
+            margin-top: 5px;
+        }
+        pre {
+            background: #f4f4f4;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        table, th, td {
+            border: 1px solid #ddd;
+        }
+        th, td {
+            padding: 12px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        pre, code {
+            background: #000;
+            color: #fff;
+        }
+    </style>
+</head>
+<body>
+    <h2>Collaborative Filtering Recommendation System</h2>
+    
+    <p>The system uses collaborative filtering based on cosine similarity to recommend items to users based on their historical ratings.</p>
+    
+    <h3>Time and Space Complexity</h3>
+    <table>
+        <tr>
+            <th>Operation</th>
+            <th>Complexity</th>
+        </tr>
+        <tr>
+            <td>Building User-Item Matrix</td>
+            <td>O(N * M)</td>
+        </tr>
+        <tr>
+            <td>Computing Cosine Similarity</td>
+            <td>O(N^2 * M)</td>
+        </tr>
+        <tr>
+            <td>Predicting Ratings</td>
+            <td>O(N^2 * M)</td>
+        </tr>
+        <tr>
+            <td>Generating Recommendations</td>
+            <td>O(N * M * log(M))</td>
+        </tr>
+    </table>
+    
+    <div class="code-container">
+        <h3>Python Code Example</h3>
+        <pre><code>
+import pandas as pd
+import numpy as np
+from sklearn.metrics.pairwise import cosine_similarity
+
+# Updated user-item interaction data
+data = {
+    'user_id': [1, 1, 1, 2, 2, 3, 3, 4, 4, 5],  
+    'item_id': [10, 20, 30, 10, 40, 20, 30, 10, 40, 50],  
+    'rating': [4, 5, 3, 5, 4, 2, 5, 5, 3, 4] 
+}
+
+df = pd.DataFrame(data)
+
+# Pivot table to create user-item matrix
+user_item_matrix = df.pivot_table(index='user_id', columns='item_id', values='rating', fill_value=0)
+
+# Compute cosine similarity between users
+user_similarity = cosine_similarity(user_item_matrix)
+user_similarity_df = pd.DataFrame(user_similarity, index=user_item_matrix.index, columns=user_item_matrix.index)
+
+def predict_ratings(user_item_matrix, user_similarity):
+    mean_user_rating = user_item_matrix.mean(axis=1)
+    ratings_diff = (user_item_matrix.T - mean_user_rating).T
+    pred = mean_user_rating[:, np.newaxis] + user_similarity.dot(ratings_diff) / np.array([np.abs(user_similarity).sum(axis=1)]).T
+    return pred
+
+# Predict ratings for all user-item pairs
+predicted_ratings = predict_ratings(user_item_matrix.values, user_similarity)
+predicted_ratings_df = pd.DataFrame(predicted_ratings, index=user_item_matrix.index, columns=user_item_matrix.columns)
+
+def get_recommendations(user_id, user_item_matrix, predicted_ratings_df, num_recommendations=5):
+    user_idx = user_item_matrix.index.get_loc(user_id)
+    user_ratings = user_item_matrix.iloc[user_idx]
+    sorted_ratings = predicted_ratings_df.iloc[user_idx].sort_values(ascending=False)
+    recommendations = sorted_ratings[~user_ratings.index.isin(user_ratings[user_ratings > 0].index)]
+    return recommendations.head(num_recommendations)
+
+# Example: Get recommendations for user 4
+user_id = 4
+recommendations = get_recommendations(user_id, user_item_matrix, predicted_ratings_df)
+print(f"Top recommendations for user {user_id}:")
+print(recommendations)
+        </code></pre>
+    </div>
+
+</body>
+</html>

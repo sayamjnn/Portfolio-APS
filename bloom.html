@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bloom Filter Implementation</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        h1, h2 {
+            color: teal; 
+        }
+        p{
+            margin-top: 5px;
+        }
+        pre {
+            background: #f4f4f4;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        table, th, td {
+            border: 1px solid #ddd;
+        }
+        th, td {
+            padding: 12px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        pre, code {
+            background: #000;
+            color: #fff;
+        }
+
+    </style>
+</head>
+<body>
+    <h1>Bloom Filter</h1>
+    
+    <p>A Bloom Filter is a space-efficient probabilistic data structure used to test whether an element is a member of a set. It uses multiple hash functions to map elements to a bit array, allowing for quick checks with a manageable false positive rate.</p>
+    
+    <h2>Time and Space Complexity</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Operation</th>
+                <th>Time Complexity</th>
+                <th>Space Complexity</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Addition of an element</td>
+                <td>O(k)</td>
+                <td>O(m)</td>
+            </tr>
+            <tr>
+                <td>Membership check</td>
+                <td>O(k)</td>
+                <td>O(m)</td>
+            </tr>
+        </tbody>
+    </table>
+    <p>Where <em>k</em> is the number of hash functions, and <em>m</em> is the size of the Bloom Filter bit array.</p>
+    
+    <h2>Implementation</h2>
+    <pre>
+<code>
+import java.util.BitSet;
+import java.util.Random;
+
+public class BloomFilter {
+    private BitSet bitSet;
+    private int size;
+    private int[] hashSeeds;
+    private int numHashFunctions;
+
+    public BloomFilter(int size, int numHashFunctions) {
+        this.size = size;
+        this.numHashFunctions = numHashFunctions;
+        this.bitSet = new BitSet(size);
+        this.hashSeeds = new int[numHashFunctions];
+        generateHashSeeds();
+    }
+
+    private void generateHashSeeds() {
+        Random random = new Random();
+        for (int i = 0; i < numHashFunctions; i++) {
+            hashSeeds[i] = random.nextInt();
+        }
+    }
+
+    private int[] getHashValues(String item) {
+        int[] hashValues = new int[numHashFunctions];
+        for (int i = 0; i < numHashFunctions; i++) {
+            hashValues[i] = Math.abs((item.hashCode() ^ hashSeeds[i]) % size);
+        }
+        return hashValues;
+    }
+
+    public void add(String item) {
+        int[] hashValues = getHashValues(item);
+        for (int hash : hashValues) {
+            bitSet.set(hash);
+        }
+    }
+
+    public boolean mightContain(String item) {
+        int[] hashValues = getHashValues(item);
+        for (int hash : hashValues) {
+            if (!bitSet.get(hash)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public static void main(String[] args) {
+        // Example usage in a food delivery app context
+        BloomFilter bloomFilter = new BloomFilter(1000, 5);
+
+        // Adding restaurant recommendations
+        bloomFilter.add("Restaurant A");
+        bloomFilter.add("Restaurant B");
+        bloomFilter.add("Restaurant C");
+
+        // Checking if a recommendation has been shown before
+        System.out.println("Has Restaurant A been shown? " + bloomFilter.mightContain("Restaurant A"));
+        System.out.println("Has Restaurant D been shown? " + bloomFilter.mightContain("Restaurant D"));
+
+        // Adding more recommendations
+        bloomFilter.add("Restaurant D");
+
+        // Checking again after adding
+        System.out.println("Has Restaurant D been shown? " + bloomFilter.mightContain("Restaurant D"));
+    }
+}
+</code>
+    </pre>
+</body>
+</html>
